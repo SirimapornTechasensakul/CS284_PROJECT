@@ -23,7 +23,8 @@ public class GradeRange extends JFrame implements ActionListener {
 	
 	private List<JTextField> min_tx;
 	private JPanel grid;
-	private JButton bck_btn, sub_btn;
+	private JButton bck_btn, sub_btn,clr_btn;
+	private int grade,g;
 	
 	public GradeRange() {
 		// TODO Auto-generated constructor stub
@@ -44,7 +45,8 @@ public class GradeRange extends JFrame implements ActionListener {
 		for(int i = 0; i<8; i++){
 			JPanel b = new JPanel();
 			JLabel a ;
-			int grade = Holder.getGradeScore(i);
+			grade = Holder.getGradeScore(i);
+			g = i;
 			String range;
 			switch(i){
 			case 0: a = new JLabel("A  >=");range = grade>-1?""+grade:"80";break;
@@ -65,6 +67,12 @@ public class GradeRange extends JFrame implements ActionListener {
 			min_tx.add(tx);
 			grid.add(b);
 		}
+		
+		JPanel clear = new JPanel();
+		clr_btn = new JButton("Clear Score");
+		clr_btn.addActionListener(this);
+		clear.add(clr_btn);
+		grid.add(clear);
 		
 		//add button
 		bck_btn = new JButton("Back");
@@ -117,6 +125,21 @@ public class GradeRange extends JFrame implements ActionListener {
 				JOptionPane.showMessageDialog(this, n.getLocalizedMessage());
 			}
 		}
+		else if(e.getActionCommand().equals(clr_btn.getActionCommand())){
+			String ObjButtons[] = {"Yes","No"};
+	        int PromptResult = JOptionPane.showOptionDialog(null,"Do you want to clear up your score.","Clear Score",JOptionPane.DEFAULT_OPTION,JOptionPane.WARNING_MESSAGE,null,ObjButtons,ObjButtons[1]);
+	        if(PromptResult==JOptionPane.YES_OPTION)
+	        {
+	        	
+	            for(int i =0 ; i < min_tx.size(); i++){
+	            	min_tx.get(i).setText("0.0");
+	            	if(i % g == 0){
+	            		Holder.getStudent(i / g).clearScore();
+	            		Holder.setNotReadyToExport();
+	            	}
+	            }
+	        }
 	}
 
+	}
 }
